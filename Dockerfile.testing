@@ -1,0 +1,18 @@
+FROM openjdk:17-oracle
+
+# Create App Directory in Container
+RUN mkdir -p /opt/my-movies-api/.mvn
+RUN mkdir -p /opt/my-movies-api/src/main/java
+RUN mkdir -p /opt/my-movies-api/src/main/resources
+RUN mkdir -p /opt/my-movies-api/src/test
+
+# Copy Back-End Source Files
+COPY .mvn /opt/my-movies-api/.mvn
+COPY src/main/java /opt/my-movies-api/src/main/java
+COPY src/main/resources /opt/my-movies-api/src/main/resources
+COPY src/test /opt/my-movies-api/src/test
+COPY .env mvnw my-movies-api.iml pom.xml /opt/my-movies-api/
+
+# Run Tests
+WORKDIR /opt/my-movies-api
+ENTRYPOINT ["./mvnw", "test"]

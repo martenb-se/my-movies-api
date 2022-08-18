@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: springio/my-movies-api
+    container_name: ${DEV_DOCKER_CONTAINER_NAME}
+    networks:
+      - db-net
+      - db-api
+    environment:
+      - API_PORT=8080 # Use standard port internally
+      - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME}
+      - LOGGING_LEVEL=${LOGGING_LEVEL}
+      - SPRING_DATASOURCE_URL_HOST=db # Internal connection to db
+      - SPRING_DATASOURCE_URL_PORT=5432 # Internal port is always 5432
+      - SPRING_DATASOURCE_URL_DB=${SPRING_DATASOURCE_URL_DB}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    healthcheck:
+      test: "curl --fail --silent api:${API_PORT}/actuator/health | grep UP || exit 1"
+      interval: 45s
+      timeout: 10s
+      retries: 10
+    ports:
+      - "${DEV_API_PORT}:8080"
+
+networks:
+  db-net:
+    name: dev-my-movies-network-db
+    external: true
+  db-api:
+    name: dev-my-movies-network-api
