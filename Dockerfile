@@ -11,7 +11,7 @@ COPY .mvn /opt/my-movies-api/.mvn
 COPY src/main/java /opt/my-movies-api/src/main/java
 COPY src/main/resources /opt/my-movies-api/src/main/resources
 COPY src/test /opt/my-movies-api/src/test
-COPY .env mvnw my-movies-api.iml pom.xml /opt/my-movies-api/
+COPY .env mvnw pom.xml /opt/my-movies-api/
 
 # Set environment during build process when unit tests will run
 ENV API_PORT=8080
